@@ -57,6 +57,10 @@ public class MLFQSchedulerEngine {
             }
 
             // 2. Check Aging (Promote Starving Processes)
+            // if any process has aged move to Q0
+            checkAging(queue1);
+            checkAging(queue2);
+
 
             // 3. Select Process (Dispatcher)
             // 4. Context Switch / Preemption Logic
@@ -108,6 +112,7 @@ public class MLFQSchedulerEngine {
                 //add the process to queue 0
                 queue0.add(p);
 
+                System.out.printf("%4d | %s | %s | Aged -> promoted to Q0\n", globalTime, p.getPid(), (queue == queue1? "Q1" : "Q2"));
             }
         }
 
