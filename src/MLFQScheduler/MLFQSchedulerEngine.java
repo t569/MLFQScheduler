@@ -40,10 +40,40 @@ public class MLFQSchedulerEngine {
         // Simulation loop
         while(completedProcess.size() < allProcesses.size())
         {
-
+            // 1. Handle Arrivals
+            // 2. Check Aging (Promote Starving Processes)
+            // 3. Select Process (Dispatcher)
+            // 4. Context Switch / Preemption Logic
+            // 5. Execution Step
+            // 6. Post-Execution Logic (Completion or Demotion)
         }
+    }
 
+    private void printMetrics()
+    {
+        System.out.println("\n Simulation Completed");
+        System.out.println("---------------------------------------------------------------");
+        System.out.printf("%-5s %-10s %-10s %-10s %-10s %-10s\n", "PID","Arr Time", "Burst", "Finish", "Wait", "Turn around");
+        System.out.println("---------------------------------------------------------------");
 
+        completedProcess.sort(Comparator.comparing(p -> p.getPid()));
+
+        double totalWT = 0, totalTAT = 0;
+        for(Process p: completedProcess)
+        {
+            System.out.printf("%-5s %-10d %-10d %-10d %-10d %-10d\n", p.getPid(),
+                                                                        p.getArrivalTime(),
+                                                                        p.getBurstTime(),
+                                                                        p.getFinishTime(),
+                                                                        p.getWaitingTime(),
+                                                                        p.getTurnaroundTime());
+            totalWT += p.getWaitingTime();
+            totalTAT += p.getTurnaroundTime();
+
+            System.out.println("---------------------------------------------------------------------------------");
+            System.out.printf("Average Waiting Time: %.2f\n", totalWT / completedProcess.size());
+            System.out.printf("Average Turnaround Time: %.2f\n", totalTAT / completedProcess.size());
+        }
     }
 
 }
