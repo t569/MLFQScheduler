@@ -63,7 +63,35 @@ public class MLFQSchedulerEngine {
 
 
             // 3. Select Process (Dispatcher)
+            Process nextProcess = null;
+            if(! queue0.isEmpty()) nextProcess = queue0.peek();
+            else if (! queue1.isEmpty()) nextProcess = queue1.peek();
+            else if (!queue2.isEmpty()) nextProcess = queue2.peek();
+
+
             // 4. Context Switch / Preemption Logic
+            if (currentProcess != null && currentProcess != nextProcess)
+            {
+                if (currentProcess.getRemainingTime() > 0){
+                    // the process was preempted put it back in the appropriate queue
+                    int priorityLevel = currentProcess.getPriorityLevel();
+
+                    switch(priorityLevel){
+                        case 0:
+                            queue0.add(currentProcess);
+                            break;
+                        case 1:
+                            queue1.add(currentProcess);
+                            break;
+                        case 2:
+                            queue2.add(currentProcess);
+                            break;
+                    }
+                }
+
+                // Reset the quantum counter
+                currentProcessQuantumUsed = 0;
+            }
             // 5. Execution Step
             // 6. Post-Execution Logic (Completion or Demotion)
         }
