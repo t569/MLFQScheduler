@@ -41,6 +41,20 @@ public class MLFQSchedulerEngine {
         while(completedProcess.size() < allProcesses.size())
         {
             // 1. Handle Arrivals
+
+            // move from the arrival list to queue0 ( highest priority)
+
+            Iterator<Process> arrivalIterator = arrivalQueue.iterator();
+            while (arrivalIterator.hasNext())
+            {
+                Process p = arrivalIterator.next();
+                if(p.getArrivalTime() == globalTime)
+                {
+                    queue0.add(p);
+                    System.out.printf("%4d | %s | Q0 | Arrived\n", globalTime, p.getPid());
+                    arrivalIterator.remove();
+                }
+            }
             // 2. Check Aging (Promote Starving Processes)
             // 3. Select Process (Dispatcher)
             // 4. Context Switch / Preemption Logic
