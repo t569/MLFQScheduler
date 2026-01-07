@@ -93,6 +93,28 @@ public class MLFQSchedulerEngine {
                 currentProcessQuantumUsed = 0;
             }
             // 5. Execution Step
+            if(nextProcess != null)
+            {
+                if(nextProcess.getPriorityLevel() == 0) queue0.poll();
+                else if(nextProcess.getPriorityLevel() == 1) queue1.poll();
+                else queue2.poll();
+
+                currentProcess = nextProcess;
+
+                // Record time of execution
+                if(!currentProcess.hasStarted())
+                {
+                    currentProcess.setStartTime(globalTime);
+                    currentProcess.setResponseTime(globalTime - currentProcess.getArrivalTime());
+                    currentProcess.setHasStarted(true);
+                }
+
+                // execute the process for 1 tick
+                currentProcess.decrementRemainingTime();
+                currentProcessQuantumUsed++;
+
+                updateWaitingTimes();
+            }
             // 6. Post-Execution Logic (Completion or Demotion)
         }
     }
@@ -144,5 +166,12 @@ public class MLFQSchedulerEngine {
             }
         }
 
+    }
+
+    private void updateWaitingTimes()
+    {
+        // for all proccesses in all the queues increment their time in current queue
+
+        // for all processes in all queues increment waiting time
     }
 }

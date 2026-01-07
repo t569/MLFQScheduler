@@ -14,6 +14,11 @@ public class Process implements Comparable<Process> {
     // ====================== STATIC ATTRIBUTES ======================
     /** Unique identifier for the process */
     private String pid;
+
+
+    /** time the process starts **/
+    private int startTime;
+
     /** Time at which the process arrives in the system */
     private int arrivalTime;
     /** Total CPU time required to complete the process */
@@ -89,6 +94,7 @@ public class Process implements Comparable<Process> {
     public int getPriorityLevel() { return priorityLevel; }
     public int getTimeInCurrentQueue() { return timeInCurrentQueue; }
     public boolean hasStarted() { return hasStarted; }
+    public int getStartTime() {return startTime; }
 
     public void setRemainingTime(int remainingTime) { this.remainingTime = remainingTime; }
     public void setWaitingTime(int waitingTime) { this.waitingTime = waitingTime; }
@@ -98,7 +104,9 @@ public class Process implements Comparable<Process> {
     public void setPriorityLevel(int priorityLevel) { this.priorityLevel = priorityLevel; }
     public void setTimeInCurrentQueue(int timeInCurrentQueue) { this.timeInCurrentQueue = timeInCurrentQueue; }
     public void setHasStarted(boolean hasStarted) { this.hasStarted = hasStarted; }
+    public void setStartTime(int timeToSet) {this.startTime = timeToSet;}
 
+    public void decrementRemainingTime() {this.remainingTime--;}
     /**
      * Updates process state when it executes for a time quantum.
      *
