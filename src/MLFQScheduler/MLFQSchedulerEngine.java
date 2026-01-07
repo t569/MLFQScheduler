@@ -27,6 +27,23 @@ public class MLFQSchedulerEngine {
 
     public void run(List<Process> allProcesses){
         System.out.println("Running scheduler!!");
+
+
+        // Sort by arrival time
+        Collections.sort(allProcesses);
+        List<Process> arrivalQueue = new ArrayList<>(allProcesses);
+
+        System.out.println("Starting sim....");
+        System.out.println("Time | PID | Queue | Action ");
+
+
+        // Simulation loop
+        while(completedProcess.size() < allProcesses.size())
+        {
+
+        }
+
+
     }
 
 }
