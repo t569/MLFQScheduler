@@ -94,6 +94,22 @@ public class MLFQSchedulerEngine {
 
     private void checkAging(Queue<Process> queue)
     {
+        Iterator<Process> it = queue.iterator();
+        while(it.hasNext()){
+            Process p = it.next();
+            // to check if p is greater than aging threshold
+            if(p.getTimeInCurrentQueue()>agingThreshold){
+                // it should be removed
+                it.remove();
+                //then the priority should be rest
+                p.setTimeInCurrentQueue(0);
+                // set priority level to
+                p.setPriorityLevel(0);
+                //add the process to queue 0
+                queue0.add(p);
+
+            }
+        }
 
     }
 }
