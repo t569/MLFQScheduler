@@ -16,7 +16,7 @@ public class MLFQSchedulerEngine {
     private Queue<Process> queue2 = new LinkedList<>(); // Implements a FCFS
 
     // progress shii
-    private List<Process> completedProcess = new ArrayList<>();
+    private List<Process> completedProcesses = new ArrayList<>();
     private List<Process> ganttChart = new ArrayList<>();      // this is to track execution order
 
 
@@ -38,7 +38,7 @@ public class MLFQSchedulerEngine {
 
 
         // Simulation loop
-        while(completedProcess.size() < allProcesses.size())
+        while(completedProcesses.size() < allProcesses.size())
         {
             // 1. Handle Arrivals
 
@@ -114,9 +114,67 @@ public class MLFQSchedulerEngine {
                 currentProcessQuantumUsed++;
 
                 updateWaitingTimes();
+
+                // 6. Post-Execution Logic (Completion or Demotion)
+                if (currentProcess.getRemainingTime() == 0)
+                {
+                    // Process has completed
+                    currentProcess.setFinishTime(globalTime + 1);
+                    currentProcess.setTurnaroundTime(currentProcess.getFinishTime() - currentProcess.getArrivalTime());
+                    completedProcesses.add(currentProcess);
+
+                    System.out.printf("%4d | %s | DONE | Finished (TAT: %d)\n", globalTime, currentProcess.getPid(), currentProcess.getTurnaroundTime());
+                    currentProcess = null;
+                    currentProcessQuantumUsed = 0;
+                }
+
+                else
+                {
+                    // Process has not completed
+                    if(currentProcess.getPriorityLevel() == 0 && currentProcessQuantumUsed >= quantumQ0)
+                    {
+                        // Demote from Q0 -> Q1
+                        currentProcess.setPriorityLevel(1);
+                        currentProcess.setTimeInCurrentQueue(0);
+                        queue1.add(currentProcess);
+                        System.out.printf("%4d | %s | Q0 | Quantum Expired -> Demote to Q1\n", globalTime, currentProcess.getPid());
+                        currentProcess = null;
+                        currentProcessQuantumUsed = 0;
+                    }
+
+                    else if(currentProcess.getPriorityLevel() == 1 && currentProcessQuantumUsed >= quantumQ1)
+                    {
+                        // Demote from Q1 -> Q2
+                        currentProcess.setPriorityLevel(2);
+                        currentProcess.setTimeInCurrentQueue(0);
+                        queue1.add(currentProcess);
+                        System.out.printf("%4d | %s | Q0 | Quantum Expired -> Demote to Q2\n", globalTime, currentProcess.getPid());
+                        currentProcess = null;
+                        currentProcessQuantumUsed = 0;
+                    }
+
+                    else if (currentProcess.getPriorityLevel() == 2)
+                    {
+                        // FCFS is used in queue2
+
+                        queue2.add(currentProcess);
+                    }
+
+                    else
+                    {
+                        if (currentProcess.getPriorityLevel() == 0) ((LinkedList<Process>)queue0).addFirst((currentProcess));
+                        else if (currentProcess.getPriorityLevel() == 1) ((LinkedList<Process>)queue1).addFirst((currentProcess));
+                    }
+                }
+            } else
+            {
+                // the CPU is idle
+                System.out.printf("%4d | IDLE\n", globalTime);
             }
-            // 6. Post-Execution Logic (Completion or Demotion)
+            globalTime++;
         }
+
+        printMetrics();
     }
 
     private void printMetrics()
@@ -126,10 +184,10 @@ public class MLFQSchedulerEngine {
         System.out.printf("%-5s %-10s %-10s %-10s %-10s %-10s\n", "PID","Arr Time", "Burst", "Finish", "Wait", "Turn around");
         System.out.println("---------------------------------------------------------------");
 
-        completedProcess.sort(Comparator.comparing(p -> p.getPid()));
+        completedProcesses.sort(Comparator.comparing(p -> p.getPid()));
 
         double totalWT = 0, totalTAT = 0;
-        for(Process p: completedProcess)
+        for(Process p: completedProcesses)
         {
             System.out.printf("%-5s %-10d %-10d %-10d %-10d %-10d\n", p.getPid(),
                                                                         p.getArrivalTime(),
@@ -141,8 +199,8 @@ public class MLFQSchedulerEngine {
             totalTAT += p.getTurnaroundTime();
 
             System.out.println("---------------------------------------------------------------------------------");
-            System.out.printf("Average Waiting Time: %.2f\n", totalWT / completedProcess.size());
-            System.out.printf("Average Turnaround Time: %.2f\n", totalTAT / completedProcess.size());
+            System.out.printf("Average Waiting Time: %.2f\n", totalWT / completedProcesses.size());
+            System.out.printf("Average Turnaround Time: %.2f\n", totalTAT / completedProcesses.size());
         }
     }
 
