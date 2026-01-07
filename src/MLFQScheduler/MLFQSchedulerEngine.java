@@ -55,7 +55,9 @@ public class MLFQSchedulerEngine {
                     arrivalIterator.remove();
                 }
             }
+
             // 2. Check Aging (Promote Starving Processes)
+
             // 3. Select Process (Dispatcher)
             // 4. Context Switch / Preemption Logic
             // 5. Execution Step
@@ -90,4 +92,8 @@ public class MLFQSchedulerEngine {
         }
     }
 
+    private void checkAging(Queue<Process> queue)
+    {
+
+    }
 }
