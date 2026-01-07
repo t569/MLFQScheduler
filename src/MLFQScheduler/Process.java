@@ -5,6 +5,10 @@
  * The class maintains both static attributes (process characteristics that don't change)
  * and dynamic state variables (values that change during process execution and scheduling).
  */
+
+package MLFQScheduler;
+
+import java.lang.String;
 public class Process implements Comparable<Process> {
 
     // ====================== STATIC ATTRIBUTES ======================

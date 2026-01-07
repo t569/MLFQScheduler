@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MLFQShceduler.iml" filepath="$PROJECT_DIR$/MLFQShceduler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MLFQScheduler.iml" filepath="$PROJECT_DIR$/MLFQScheduler.iml" />
     </modules>
   </component>
 </project>
