@@ -64,7 +64,11 @@ public class Process implements Comparable<Process> {
     @Override
     public int compareTo(Process other) {
         // Compare arrival times for natural ordering
-        return Integer.compare(this.arrivalTime, other.arrivalTime);
+        if(this.arrivalTime != other.arrivalTime)
+        {
+            return Integer.compare(this.arrivalTime, other.arrivalTime);
+        }
+        return this.pid.compareTo(other.pid);   // the tie-breaker
     }
 
     // ====================== GETTERS AND SETTERS ======================
