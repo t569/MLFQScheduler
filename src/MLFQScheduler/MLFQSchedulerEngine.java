@@ -170,8 +170,20 @@ public class MLFQSchedulerEngine {
 
     private void updateWaitingTimes()
     {
-        // for all proccesses in all the queues increment their time in current queue
-
+        // for all processes in all the queues increment their time in current queue
         // for all processes in all queues increment waiting time
+        for(Process p : queue0){
+            p.setTimeInCurrentQueue(p.getTimeInCurrentQueue()+1);
+            p.setWaitingTime(p.getWaitingTime()+1);
+        }
+        for(Process p: queue1){
+            p.setTimeInCurrentQueue(p.getTimeInCurrentQueue()+1);
+            p.setWaitingTime(p.getWaitingTime()+1);
+        }
+        for(Process p : queue2){
+            p.setTimeInCurrentQueue(p.getTimeInCurrentQueue()+1);
+            p.setWaitingTime(p.getWaitingTime()+1);
+        }
+
     }
 }
